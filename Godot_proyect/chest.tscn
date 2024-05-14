@@ -1,0 +1,50 @@
+[gd_scene load_steps=9 format=3 uid="uid://d3gw33nsq5ski"]
+
+[ext_resource type="Texture2D" uid="uid://cl0osw5gpinde" path="res://bin/gdextension_icons/chest.png" id="1_godbg"]
+[ext_resource type="Texture2D" uid="uid://c2e5nio7o8ohx" path="res://bin/gdextension_icons/chest_open_1.png" id="2_0lafs"]
+[ext_resource type="Texture2D" uid="uid://by62qvewerp7i" path="res://bin/gdextension_icons/chest_open_2.png" id="3_g1661"]
+[ext_resource type="Texture2D" uid="uid://biybjr5ms3ih3" path="res://bin/gdextension_icons/chest_open_3.png" id="4_iark7"]
+[ext_resource type="Texture2D" uid="uid://gmxc8i7itxfq" path="res://bin/gdextension_icons/chest_open_4.png" id="5_yrps4"]
+[ext_resource type="Script" path="res://Chest.gd" id="6_p688u"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_hy3fi"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_godbg")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_0lafs")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_g1661")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_iark7")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_yrps4")
+}],
+"loop": true,
+"name": &"open_chest",
+"speed": 5.0
+}]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_ixb16"]
+
+[node name="Chest" type="AnimatedSprite2D"]
+sprite_frames = SubResource("SpriteFrames_hy3fi")
+script = ExtResource("6_p688u")
+
+[node name="open_chest_area" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="open_chest_area"]
+shape = SubResource("CircleShape2D_ixb16")
+
+[connection signal="body_entered" from="open_chest_area" to="." method="_on_open_chest_area_body_entered"]
+[connection signal="body_exited" from="open_chest_area" to="." method="_on_open_chest_area_body_exited"]
