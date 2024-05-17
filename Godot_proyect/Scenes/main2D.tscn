@@ -1,9 +1,19 @@
-[gd_scene load_steps=3 format=3 uid="uid://d2yje5fx4i6jw"]
+[gd_scene load_steps=11 format=3 uid="uid://d2yje5fx4i6jw"]
 
-[ext_resource type="PackedScene" uid="uid://be01056xkuyyv" path="res://Player.tscn" id="1_4c7rm"]
+[ext_resource type="PackedScene" uid="uid://be01056xkuyyv" path="res://Scenes/Player.tscn" id="1_4c7rm"]
+[ext_resource type="PackedScene" uid="uid://ndh6kdqmuvge" path="res://Scenes/gray_spectre.tscn" id="2_k2sg8"]
+[ext_resource type="PackedScene" uid="uid://dex4hnv3vqu30" path="res://Scenes/red_spectre.tscn" id="3_8qkn0"]
+[ext_resource type="PackedScene" uid="uid://6royrngfw2mv" path="res://Scenes/blue_spectre.tscn" id="3_y583k"]
+[ext_resource type="Texture2D" uid="uid://c1lfx8q8bt7ds" path="res://Images/sprites/objects/chest_01.png" id="5_cq4ab"]
+[ext_resource type="Script" path="res://Scenes/chest.gd" id="6_j2thc"]
+[ext_resource type="PackedScene" uid="uid://cn4syki7dg7b6" path="res://Scenes/key.tscn" id="6_vgq6t"]
+[ext_resource type="PackedScene" uid="uid://bhj3yv4g8uccg" path="res://Scenes/jar.tscn" id="8_ghefh"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_hgdpr"]
-size = Vector2(294.563, 76.3613)
+[sub_resource type="CircleShape2D" id="CircleShape2D_i2ve2"]
+radius = 38.6394
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_21ufl"]
+size = Vector2(14, 15)
 
 [node name="Main" type="Node2D"]
 position = Vector2(136, 75)
@@ -12,9 +22,47 @@ position = Vector2(136, 75)
 
 [node name="Camera2D" type="Camera2D" parent="CharacterBody2D"]
 
-[node name="StaticBody2D" type="StaticBody2D" parent="."]
-position = Vector2(-107, 87)
+[node name="gray_spectre" parent="." instance=ExtResource("2_k2sg8")]
+position = Vector2(-59, -30)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D"]
-position = Vector2(137.282, -28.1806)
-shape = SubResource("RectangleShape2D_hgdpr")
+[node name="red_spectre" parent="." instance=ExtResource("3_8qkn0")]
+position = Vector2(101, -14)
+
+[node name="blue_spectre" parent="." instance=ExtResource("3_y583k")]
+position = Vector2(218, -9)
+
+[node name="key" parent="." instance=ExtResource("6_vgq6t")]
+position = Vector2(-40, 9)
+
+[node name="chest" type="StaticBody2D" parent="."]
+script = ExtResource("6_j2thc")
+
+[node name="chest_zone" type="Area2D" parent="chest"]
+collision_layer = 3
+collision_mask = 3
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="chest/chest_zone"]
+position = Vector2(51, 68)
+shape = SubResource("CircleShape2D_i2ve2")
+
+[node name="closed" type="Sprite2D" parent="chest"]
+position = Vector2(51, 68)
+texture = ExtResource("5_cq4ab")
+hframes = 4
+
+[node name="opened" type="Sprite2D" parent="chest"]
+position = Vector2(51, 68)
+texture = ExtResource("5_cq4ab")
+hframes = 4
+frame = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="chest"]
+position = Vector2(51, 68.5)
+shape = SubResource("RectangleShape2D_21ufl")
+
+[node name="Jar" parent="." instance=ExtResource("8_ghefh")]
+position = Vector2(-66, 54)
+
+[connection signal="chest_opened" from="key" to="chest" method="_on_key_chest_opened"]
+[connection signal="body_entered" from="chest/chest_zone" to="key" method="_on_chest_zone_body_entered"]
+[connection signal="body_exited" from="chest/chest_zone" to="key" method="_on_chest_zone_body_exited"]
